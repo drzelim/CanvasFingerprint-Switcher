@@ -33,7 +33,7 @@ const changeFingerprint = async () => {
 
   await chrome.scripting.unregisterContentScripts();
 
-  chrome.scripting.registerContentScripts([
+  await chrome.scripting.registerContentScripts([
     {
       ...commonSettings,
       'id': '1-inject',
