@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Change Fingerprint",
+    "version": "0.1",
+    "author": "DrZelim",
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "My Popup"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "scripting",
+        "activeTab",
+        "tabs",
+        "storage",
+        "webNavigation"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ]
+}
