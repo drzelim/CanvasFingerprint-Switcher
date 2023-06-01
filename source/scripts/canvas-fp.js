@@ -17,13 +17,15 @@
   };
 
   const changeCanvasFP = (object) => {
-    if (userFPSettings.isCanvasEnable === 'false') return;
     if (!object) object = self;
 
     const toDataURLOriginalFunction = object?.HTMLCanvasElement.prototype.toDataURL;
     if (!toDataURLOriginalFunction) return;
 
     object.HTMLCanvasElement.prototype.toDataURL = function (type) {
+      if (userFPSettings.isCanvasEnable === 'false') {
+        return toDataURLOriginalFunction.apply(this, arguments);
+      }
       if (!type || (type === 'image/png' || type === 'image/jpeg')) {
         const context = this.getContext('2d');
         editImage(context, userFPSettings);

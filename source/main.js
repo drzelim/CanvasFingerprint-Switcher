@@ -42,7 +42,7 @@ const changeFingerprint = async () => {
     },
     {
       ...commonSettings,
-      'id': '2-changeCanvasFP',
+      'id': '2-utils',
       'js': ['/scripts/utils.js'],
       'world': 'MAIN',
     },

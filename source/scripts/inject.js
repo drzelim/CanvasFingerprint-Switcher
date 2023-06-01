@@ -26,6 +26,21 @@ const getCanvasFPSettings = () => {
   }
 };
 
+const settingsAdapter = (settings) => {
+  const result = {};
+  const moveToTopLevel = (obj) => {
+    for (let prop in obj) {
+      if (typeof obj[prop] === 'object') {
+        moveToTopLevel(obj[prop]);
+      } else {
+        Object.assign(result, {[prop]: obj[prop]});
+      }
+    }
+  };
+  moveToTopLevel(settings);
+  return result;
+};
+
 
 Object.assign(portal.dataset, self.fpSettings);
 
@@ -33,7 +48,7 @@ if (!Object.keys(portal.dataset).length) {
   chrome.runtime.sendMessage({action: 'getSettings'}, function(response) {
     if (!Object.keys(portal.dataset).length) {
       const userSettings = response.userSettings || getCanvasFPSettings();
-      Object.assign(portal.dataset, userSettings);
+      Object.assign(portal.dataset, settingsAdapter(userSettings));
     }
   });
 }
