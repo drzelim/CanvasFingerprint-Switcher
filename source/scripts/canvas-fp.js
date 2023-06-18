@@ -16,11 +16,10 @@
     context.fillText(settings.text, +settings.x, +settings.y);
   };
 
+  const toDataURLOriginalFunction = HTMLCanvasElement.prototype.toDataURL;
+
   const changeCanvasFP = (object) => {
     if (!object) object = self;
-
-    const toDataURLOriginalFunction = object?.HTMLCanvasElement.prototype.toDataURL;
-    if (!toDataURLOriginalFunction) return;
 
     object.HTMLCanvasElement.prototype.toDataURL = function (type) {
       if (userFPSettings.isCanvasEnable === 'false') {

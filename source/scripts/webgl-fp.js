@@ -1,11 +1,13 @@
 {
   const userFPSettings = self.userFPSettings;
 
+  const originalFunction = WebGLRenderingContext.prototype.getParameter;
+  const originalFunction2 = WebGL2RenderingContext.prototype.getParameter;
+
   const changeWebGLFP = function (object) {
 
     if (!object) object = self;
 
-    const originalFunction = object.WebGLRenderingContext.prototype.getParameter;
     object.WebGLRenderingContext.prototype.getParameter = function (parameter) {
       if (userFPSettings.isWebglEnable === 'false') {
         return originalFunction.apply(this, arguments);
@@ -16,7 +18,6 @@
       return originalFunction.apply(this, arguments);
     };
 
-    const originalFunction2 = object.WebGL2RenderingContext.prototype.getParameter;
     object.WebGL2RenderingContext.prototype.getParameter = function (parameter) {
       if (userFPSettings.isWebglEnable === 'false') {
         return originalFunction2.apply(this, arguments);
