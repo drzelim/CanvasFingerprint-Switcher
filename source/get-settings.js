@@ -25,14 +25,52 @@ const getRandomCanvasSettings = (obj) => {
   };
 };
 
-const getVendorAndRenderer = (obj) => {
+const getFakeWebglCoordinates = () => {
+  const getConvertString = (str, pad) => pad.substring(str.toString().length) + str;
+
+  const fakeNumber1 = getConvertString(getRandomInt(1, 99), '00');
+  const fakeNumber2 = getConvertString(getRandomInt(1, 99), '00');
+  const fakeNumber3 = getConvertString(getRandomInt(1, 99), '00');
+  const fakeNumber4 = getConvertString(getRandomInt(1, 99), '00');
+  const fakeNumber5 = getConvertString(getRandomInt(1, 99), '00');
+  const fakeNumber6 = getConvertString(getRandomInt(1, 99), '00');
+  return [`0.45${fakeNumber1}`, `0.46${fakeNumber2}`, '0', `0.51${fakeNumber3}`, `0.51${fakeNumber4}`, '0', `0,00${fakeNumber5}`, `0.0${fakeNumber6}`, '0'];
+};
+
+const getFakeColor = () => [getRandomInt(85, 95), getRandomInt(10, 20)];
+
+const getWebglSettings = () => {
+  return [
+    {
+      fakeCoordinates: getFakeWebglCoordinates(),
+      fakeColor: getFakeColor(),
+    },
+    {
+      fakeCoordinates: getFakeWebglCoordinates(),
+      fakeColor: getFakeColor(),
+    }
+  ];
+};
+
+const getSettingsForReadPixelsFunc = () => {
+  const settings = {};
+  for (let i = 0; i < 10; i++) {
+    settings[getRandomInt(0, 250)] = getRandomInt(0, 255);
+  }
+  return settings;
+};
+
+const getRandomWebglSettings = (obj) => {
   const keys = Object.keys(desktopGraphicsProcessors);
   const vendor = keys[getRandomInt(0, keys.length - 1)];
   const renderer = desktopGraphicsProcessors[vendor][getRandomInt(0, desktopGraphicsProcessors[vendor].length - 1)];
+
   return {
     webgl: {
       vendor,
       renderer,
+      settingsForReadPixelsFunc: JSON.stringify(getSettingsForReadPixelsFunc()),
+      canvasWebglContextSettings: JSON.stringify(getWebglSettings()),
       isWebglEnable: true,
       ...obj
     }
@@ -47,7 +85,7 @@ function isSettingsExist(obj) {
 const checkSettings = (userSettings) => {
   let settingsIsChanged = false;
   if (!userSettings) {
-    userSettings = {...getRandomCanvasSettings(), ...getVendorAndRenderer()};
+    userSettings = {...getRandomCanvasSettings(), ...getRandomWebglSettings()};
     settingsIsChanged = true;
   } else {
     if (isSettingsExist(userSettings.canvas)) {
@@ -55,7 +93,7 @@ const checkSettings = (userSettings) => {
       settingsIsChanged = true;
     }
     if (isSettingsExist(userSettings.webgl)) {
-      userSettings = {...userSettings, ...getVendorAndRenderer(userSettings.webgl)};
+      userSettings = {...userSettings, ...getRandomWebglSettings(userSettings.webgl)};
       settingsIsChanged = true;
     }
   }
