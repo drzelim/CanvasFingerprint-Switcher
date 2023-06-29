@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
     "name": "CanvasFingerprint-Switcher",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "author": "DrZelim",
     "action": {
-        "default_popup": "popup.html",
+        "default_popup": "popup/popup.html",
         "default_title": "My Popup"
     },
     "background": {

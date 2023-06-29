@@ -69,25 +69,27 @@
   }
 
   const toDataURLOriginalFunction = HTMLCanvasElement.prototype.toDataURL;
+  const convertToBlobOriginalFunction = OffscreenCanvas.prototype.convertToBlob;
 
   const changeCanvasFP = (object) => {
     if (!object) object = self;
 
     object.HTMLCanvasElement.prototype.toDataURL = function (type) {
-      if (userFPSettings.isCanvasEnable === 'false') {
-        return toDataURLOriginalFunction.apply(this, arguments);
-      }
-
-      if (!type || (type === 'image/png' || type === 'image/jpeg')) {
-        editImage(this, userFPSettings);
+      if (userFPSettings.isCanvasEnable !== 'false') {
+        if (!type || (type === 'image/png' || type === 'image/jpeg')) {
+          editImage(this, userFPSettings);
+        }
       }
 
       return toDataURLOriginalFunction.apply(this, arguments);
     };
 
-    const convertToBlobOriginalFunction = object?.OffscreenCanvas.prototype.convertToBlob;
     object.OffscreenCanvas.prototype.convertToBlob = async function () {
-      editImage(this, userFPSettings);
+
+      if (userFPSettings.isCanvasEnable !== 'false') {
+        editImage(this, userFPSettings);
+      }
+
       return convertToBlobOriginalFunction.apply(this, arguments);
     };
   };
